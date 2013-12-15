@@ -8,6 +8,10 @@ function htmlEncode(t) {
 	return t != null ? t.toString().replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
 }
 
+function showEscapeCharacter(t) {
+	return t != null ? t.toString().replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t") : '';
+}
+
 function decorateWithSpan(value, className) {
 	return '<span class="' + className + '">' + htmlEncode(value) + '</span>';
 }
@@ -26,7 +30,7 @@ function valueToHTML(value) {
 		if (/^(http|https):\/\/[^\s]+$/.test(value))
 			output += decorateWithSpan('"', "type-string") + '<a href="' + value + '">' + htmlEncode(value) + '</a>' + decorateWithSpan('"', "type-string");
 		else
-			output += decorateWithSpan('"' + value + '"', "type-string");
+			output += decorateWithSpan('"' + showEscapeCharacter(value) + '"', "type-string");
 	else if (valueType == "boolean")
 		output += decorateWithSpan(value, "type-boolean");
 
