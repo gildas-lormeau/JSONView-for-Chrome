@@ -114,10 +114,10 @@ function extractData(rawText) {
 
 function processData(data) {
 	var xhr, jsonText;
-	
+
 	function formatToHTML(fnName, offset) {
 		if (!jsonText)
-			return;	
+			return;
 		port.postMessage({
 			jsonToHTML : true,
 			json : jsonText,
@@ -259,6 +259,9 @@ function init(data) {
 		if (msg.onjsonToHTML)
 			if (msg.html) {
 				displayUI(msg.theme, msg.html);
+				if(options.openInReducedView){
+					onreduce();
+				}
 			} else if (msg.json)
 				port.postMessage({
 					getError : true,
