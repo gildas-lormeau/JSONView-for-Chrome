@@ -91,7 +91,6 @@ function displayUI(theme, html) {
 
 function extractData(rawText) {
 	var tokens, text = rawText.trim();
-
 	function test(text) {
 		return ((text.charAt(0) == "[" && text.charAt(text.length - 1) == "]") || (text.charAt(0) == "{" && text.charAt(text.length - 1) == "}"));
 	}
@@ -274,11 +273,23 @@ function init(data) {
 	});
 }
 
+function stripJsonPrefix(text) {
+	// Some implementations return a JSON_PREFIX to help avoid
+	// allowing your JSON replies to be turned into JSONP replies.
+	var JSON_PREFIXES = [")]}', ", ")]}',\n"];
+	for (var i = 0 ; i< JSON_PREFIXES.length; i++) {
+		if (text.substr(0, JSON_PREFIXES[i].length) == JSON_PREFIXES[i]) {
+			text = text.substr(JSON_PREFIXES[i].length);
+		}
+	}
+	return text;
+}
+
 function load() {
 	var child, data;
 	if (document.body && (document.body.childNodes[0] && document.body.childNodes[0].tagName == "PRE" || document.body.children.length == 0)) {
 		child = document.body.children.length ? document.body.childNodes[0] : document.body;
-		data = extractData(child.innerText);
+		data = extractData(stripJsonPrefix(child.innerText));
 		if (data)
 			init(data);
 	}
