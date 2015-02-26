@@ -1,6 +1,6 @@
 /**
- * Adapted the code in to order to run in a web worker. 
- * 
+ * Adapted the code in to order to run in a web worker.
+ *
  * Original author: Benjamin Hollis
  */
 
@@ -24,7 +24,7 @@ function valueToHTML(value) {
 		output += decorateWithSpan(value, "type-number");
 	else if (valueType == "string")
 		if (/^(http|https):\/\/[^\s]+$/.test(value))
-			output += decorateWithSpan('"', "type-string") + '<a href="' + value + '">' + htmlEncode(value) + '</a>' + decorateWithSpan('"', "type-string");
+			output += decorateWithSpan('"', "type-string") + '<a href="' + btoa(value) + '">' + htmlEncode(value) + '</a>' + decorateWithSpan('"', "type-string");
 		else
 			output += decorateWithSpan('"' + value + '"', "type-string");
 	else if (valueType == "boolean")

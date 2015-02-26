@@ -45,6 +45,9 @@ function displayUI(theme, html) {
 	content += "<style>" + theme + "</style>";
 	content += html;
 	document.body.innerHTML = content;
+	document.body.querySelectorAll("a").forEach(function(a) {
+		a.setAttribute('href', atob(a.getAttribute('href')));
+	});
 	collapsers = document.querySelectorAll("#json .collapsible .collapsible");
 	statusElement = document.createElement("div");
 	statusElement.className = "status";
@@ -114,10 +117,10 @@ function extractData(rawText) {
 
 function processData(data) {
 	var xhr, jsonText;
-	
+
 	function formatToHTML(fnName, offset) {
 		if (!jsonText)
-			return;	
+			return;
 		port.postMessage({
 			jsonToHTML : true,
 			json : jsonText,
