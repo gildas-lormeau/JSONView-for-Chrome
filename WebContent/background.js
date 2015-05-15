@@ -97,6 +97,8 @@ function init() {
 				workerFormatter.addEventListener("message", onWorkerFormatterMessage, false);
 				workerFormatter.postMessage({
 					json : json,
+                                        collapseArrays: options.collapseArrays,
+                                        collapseObjects: options.collapseObjects,
 					fnName : msg.fnName
 				});
 			}

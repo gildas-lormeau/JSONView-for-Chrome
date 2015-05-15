@@ -12,14 +12,14 @@ function decorateWithSpan(value, className) {
 	return '<span class="' + className + '">' + htmlEncode(value) + '</span>';
 }
 
-function valueToHTML(value) {
+function valueToHTML(value, collapseArrays, collapseObjects) {
 	var valueType = typeof value, output = "";
 	if (value == null)
 		output += decorateWithSpan("null", "type-null");
 	else if (value && value.constructor == Array)
-		output += arrayToHTML(value);
+		output += arrayToHTML(value, collapseArrays, collapseObjects);
 	else if (valueType == "object")
-		output += objectToHTML(value);
+		output += objectToHTML(value, collapseArrays, collapseObjects);
 	else if (valueType == "number")
 		output += decorateWithSpan(value, "type-number");
 	else if (valueType == "string")
@@ -33,12 +33,20 @@ function valueToHTML(value) {
 	return output;
 }
 
-function arrayToHTML(json) {
-	var i, length, output = '<div class="collapser"></div>[<span class="ellipsis"></span><ul class="array collapsible">', hasContents = false;
+function arrayToHTML(json, collapseArrays, collapseObjects) {
+	var collapsableClass = "collapsible";
+	if (collapseArrays) {
+		collapsableClass += " collapsed";
+	}
+	var i, length, output = '<div class="collapser"></div>[<span class="ellipsis"></span><ul class="array ' + collapsableClass + '">', hasContents = false;
 	for (i = 0, length = json.length; i < length; i++) {
 		hasContents = true;
-		output += '<li><div class="hoverable">';
-		output += valueToHTML(json[i]);
+		var classes = 'hoverable';
+		if (collapseObjects) {
+			classes += " collapsed";
+		}
+		output += '<li><div class="' + classes + '">';
+		output += valueToHTML(json[i], collapseArrays, collapseObjects);
 		if (i < length - 1)
 			output += ',';
 		output += '</div></li>';
@@ -49,14 +57,19 @@ function arrayToHTML(json) {
 	return output;
 }
 
-function objectToHTML(json) {
-	var i, key, length, keys = Object.keys(json), output = '<div class="collapser"></div>{<span class="ellipsis"></span><ul class="obj collapsible">', hasContents = false;
+function objectToHTML(json, collapseArrays, collapseObjects) {
+	var collapsableClass = "collapsible";
+	var i, key, length, keys = Object.keys(json), output = '<div class="collapser"></div>{<span class="ellipsis"></span><ul class="obj ' + collapsableClass + '">', hasContents = false;
 	for (i = 0, length = keys.length; i < length; i++) {
 		key = keys[i];
 		hasContents = true;
-		output += '<li><div class="hoverable">';
+		var classes = 'hoverable';
+		if (collapseArrays) {
+			classes += " collapsed";
+		}
+		output += '<li><div class="' + classes + '">';
 		output += '<span class="property">' + htmlEncode(key) + '</span>: ';
-		output += valueToHTML(json[key]);
+		output += valueToHTML(json[key], collapseArrays, collapseObjects);
 		if (i < length - 1)
 			output += ',';
 		output += '</div></li>';
@@ -67,12 +80,12 @@ function objectToHTML(json) {
 	return output;
 }
 
-function jsonToHTML(json, fnName) {
+function jsonToHTML(json, fnName, collapseArrays, collapseObjects) {
 	var output = '';
 	if (fnName)
 		output += '<div class="callback-function">' + fnName + '(</div>';
 	output += '<div id="json">';
-	output += valueToHTML(json);
+	output += valueToHTML(json, collapseArrays, collapseObjects);
 	output += '</div>';
 	if (fnName)
 		output += '<div class="callback-function">)</div>';
@@ -91,6 +104,6 @@ addEventListener("message", function(event) {
 	}
 	postMessage({
 		onjsonToHTML : true,
-		html : jsonToHTML(object, event.data.fnName)
+		html : jsonToHTML(object, event.data.fnName, event.data.collapseArrays, event.data.collapseObjects)
 	});
 }, false);
