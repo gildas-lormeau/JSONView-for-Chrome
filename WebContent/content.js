@@ -110,6 +110,16 @@ function extractData(rawText) {
 				offset : rawText.indexOf(tokens[2])
 			};
 	}
+
+	tokens = text.match(/^(if\(window\.\S*\))([^\s\(]*)\s*\(([\s\S]*)\)\s*;?$/);
+	if (tokens && tokens[1] && tokens[2] && tokens[3]) {
+		if (test(tokens[3].trim()))
+			return {
+				fnName : tokens[2],
+				text : tokens[3],
+				offset : rawText.indexOf(tokens[3])
+			};
+	}
 }
 
 function processData(data) {
