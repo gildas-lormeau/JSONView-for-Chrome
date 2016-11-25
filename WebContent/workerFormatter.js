@@ -9,7 +9,7 @@ function htmlEncode(t) {
 }
 
 function decorateWithSpan(value, className) {
-	return '<span class="' + className + '">' + htmlEncode(value) + '</span>';
+	return '<span class="' + htmlEncode(className) + '">' + htmlEncode(value) + '</span>';
 }
 
 function valueToHTML(value) {
@@ -23,8 +23,8 @@ function valueToHTML(value) {
 	else if (valueType == "number")
 		output += decorateWithSpan(value, "type-number");
 	else if (valueType == "string")
-		if (/^(http|https):\/\/[^\s]+$/.test(value))
-			output += decorateWithSpan('"', "type-string") + '<a href="' + value + '">' + htmlEncode(value) + '</a>' + decorateWithSpan('"', "type-string");
+		if (/^https?:\/\/[^\s]+$/.test(value))
+			output += decorateWithSpan('"', "type-string") + '<a href="' + htmlEncode(value) + '">' + htmlEncode(value) + '</a>' + decorateWithSpan('"', "type-string");
 		else
 			output += decorateWithSpan('"' + value + '"', "type-string");
 	else if (valueType == "boolean")
@@ -70,7 +70,7 @@ function objectToHTML(json) {
 function jsonToHTML(json, fnName) {
 	var output = '';
 	if (fnName)
-		output += '<div class="callback-function">' + fnName + '(</div>';
+		output += '<div class="callback-function">' + htmlEncode(fnName) + '(</div>';
 	output += '<div id="json">';
 	output += valueToHTML(json);
 	output += '</div>';
