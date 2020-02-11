@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'Fira Code',
+    monospace;
+  src: url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
+}
+
+body {
+  white-space: pre;
+  font-family: Fira Code;
+  font-size: 0.75rem;
+  background: #1E2227;
+  color: #E05B56;
+  width: 800px;
+  margin: 1rem auto;
+}
+
+.property {
+  font-weight: bold;
+}
+
+.type-null {
+  color: #b9b9b9;
+}
+
+.type-boolean {
+  color: #4CB6BB;
+}
+
+.type-number {
+  color: #E5A44B;
+}
+
+.type-string {
+  color: #89C368;
+}
+
+.callback-function {
+  color: #317FE3;
+}
+
+.collapser:after {
+  content: "▼";
+  color: #596275;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.collapsed>.collapser:after {
+  content: "►";
+  color: #596275;
+  font-size: 0.7rem;
+  cursor: pointer;
+
+}
+
+.ellipsis:after {
+  content: " … ";
+}
+
+.collapsible {
+  margin-left: 2em;
+}
+
+.hoverable {
+  padding: 1px 2px 1px 2px;
+  border-radius: 2.5px;
+}
+
+.hovered {
+  background-color: #2F333B;
+}
+
+.collapser {
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+a {
+  color: #3C95EF;
+}
